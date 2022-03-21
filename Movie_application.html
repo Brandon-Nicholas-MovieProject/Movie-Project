@@ -23,7 +23,10 @@
     <h1> Movie Palace</h1>
 </header>
 
-    <div id='post' class=""></div>
+
+
+
+    <div id='post' class="mx-auto"></div>
 
 
 </body>
@@ -38,12 +41,14 @@
         console.log(data);
         for (var x = 0; x < data.length;x++){
             $('#post').append(
-                "<section class='bg-dark text-white m-3 w-25 '>" +
+                "<section class='bg-dark text-white m-3  '>" +
                 "<h4 class='p-0 m-0'>"+data[x].title +"</h4>"+
                 "<p class='p-0 m-0'>"+data[x].rating +"</p>"+
                 "<p class='p-0 m-0'>"+data[x].year +"</p>"+
                 "<p class='p-0 m-0'>"+data[x].genre +"</p>"+
                 "<p class='p-0 m-0'>"+data[x].director +"</p>"+
+                "<button>Edit</button>"+
+                "<button>Delete</button>"+
                 "</section>"
             )
         }
