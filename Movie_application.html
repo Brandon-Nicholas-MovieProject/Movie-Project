@@ -23,7 +23,7 @@
     <h1> Movie Palace</h1>
 </header>
 
-<form class="border w-50 mx-auto bg-light shadow p-3" action="#" method="get">
+<form id="movie-form" class="border w-50 mx-auto bg-light shadow p-3" action="#" method="get">
     <div class="form-group">
         <label  class="border p-2 mx-auto" for="movieTitle">Title</label>
         <input type="text" class="form-control" id="movieTitle" aria-describedby="movieTitle" placeholder="Enter Movie Title">
@@ -49,7 +49,7 @@
 
 
 
-    <div id='post' class="mx-auto"></div>
+    <div id='post' class="d-flex overflow-auto py-5"></div>
 
 
 </body>
@@ -59,24 +59,78 @@
 <script>
     fetch('https://cuboid-standing-scribe.glitch.me/movies').then( response => {
         response.json().then( movies => {
+            //Going to run through each movie
             movies.forEach( movie => {
-                // do something with each user object...
+                //The Container for each movie
                 $('#post').append(
-
-
-                    `
-                    <section class='bg-dark text-white m-3'>
-                        <img src="${movie.poster}" style='width: 220px'>
-                        <h4 class='p-0 m-0'>${movie.title}</h4>
-                        <p class='p-0 m-0'>${movie.rating}</p>
-                        <p class='p-0 m-0'>${movie.year}</p>
-                         <p class='p-0 m-0'>${movie.genre}</p>
-                         <p class='p-0 m-0'>${movie.director}</p>
-                         <button>Edit</button><button>Delete</button>
-                    </section>
-                    `
+                    `<section class='bg-dark text-white m-3 p-3 h-fit-content' id="mainContainer">
+                        <img src="${movie.poster}" class="rounded">
+                        <section class="">
+                            <h4 class='pt-3 text-capitalize'>${movie.title}</h4>
+                             <p class='p-0 m-0'>${movie.year}</p>
+                            <p class='p-0 m-0'>${movie.rating} Stars</p>
+                            <p class='p-0 m-0'>${movie.genre}</p>
+                            <p class='p-0 m-0'>${movie.director}</p>
+                            <button id="edit" class="btn btn-primary">Edit</button><button id="delete" class="btn btn-secondary">Delete</button>
+                        </section>
+                    </section>`
                 )
             });
+
+            //----- This is going to add the content to the list and update it live
+            $('[type="submit"]').click((e)=>{
+                e.preventDefault();
+                console.log(e.target);
+
+                const titleInput = $('#movieTitle').val();
+                const yearInput = $('#yearMovie').val();
+                const ratingInput = $('#ratingMovie').val();
+                const genreInput = $('#genreMovie').val();
+                const directorInput = $('#directorMovie').val();
+
+                fetch('https://cuboid-standing-scribe.glitch.me/movies',{
+                    method:'POST',
+                    body: JSON.stringify({
+                        title:titleInput,
+                        rating:ratingInput,
+                        year:yearInput,
+                        genre:genreInput,
+                        director:directorInput
+                    }),
+                    headers:{
+                        'Content-Type': 'application/json'
+                    }
+                }).then( response => response.json())
+                .then( movie => {
+                    $('#post').append(
+                        `<section class='bg-dark text-white m-3 p-3 h-fit-content' id="mainContainer">
+                        <img src="${movie.poster}" class="rounded">
+                        <section class="">
+                            <h4 class='pt-3 text-capitalize'>${movie.title}</h4>
+                             <p class='p-0 m-0'>${movie.year}</p>
+                            <p class='p-0 m-0'>${movie.rating} Stars</p>
+                            <p class='p-0 m-0'>${movie.genre}</p>
+                            <p class='p-0 m-0'>${movie.director}</p>
+                            <button id="edit" class="btn btn-primary">Edit</button><button id="delete" class="btn btn-secondary">Delete</button>
+                        </section>
+                    </section>`
+                    )
+                })
+
+            })
+
+
+            //----- UPDATE THE INFO
+            $('#post').click((e)=>{
+                if (e.target.id === 'edit') {
+                        console.log('you pressed edit')
+                    } else if (e.target.id === 'delete') {
+                        console.log('you pressed delete')
+                    }
+            });
+
+
+
         });
     });
 </script>
