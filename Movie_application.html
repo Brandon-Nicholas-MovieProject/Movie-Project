@@ -26,21 +26,15 @@
 <form id="movie-form" class="border w-50 mx-auto bg-light shadow p-3" action="#" method="get">
     <div class="form-group">
         <label  class="border p-2 mx-auto" for="movieTitle">Title</label>
-        <input type="text" class="form-control" id="movieTitle" aria-describedby="movieTitle" placeholder="Enter Movie Title">
-    </div>
-    <div class="form-group">
+        <input type="text" class="form-control" id="movieTitle" aria-describedby="movieTitle"
+               placeholder="Enter Movie Title" required>
         <label for="ratingMovie">Rating</label>
         <input type="text" class="form-control" id="ratingMovie" placeholder="Rating">
-    </div>
-    <div class="form-group">
+
         <label for="yearMovie">Year</label>
         <input type="text" class="form-control" id="yearMovie" placeholder="Year">
-    </div>
-    <div class="form-group">
         <label for="genreMovie">Genre</label>
         <input type="text" class="form-control" id="genreMovie" placeholder="Genre">
-    </div>
-    <div class="form-group">
         <label for="directorMovie">Director</label>
         <input type="text" class="form-control" id="directorMovie" placeholder="Director">
     </div>
@@ -55,83 +49,98 @@
 </body>
 <!-- Boostrap JS ----->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-
 <script>
-    fetch('https://cuboid-standing-scribe.glitch.me/movies').then( response => {
-        response.json().then( movies => {
-            //Going to run through each movie
-            movies.forEach( movie => {
-                //The Container for each movie
-                $('#post').append(
-                    `<section class='bg-dark text-white m-3 p-3 h-fit-content' id="mainContainer">
-                        <img src="${movie.poster}" class="rounded">
-                        <section class="">
+
+    //----- CRUD Fetch
+    //--- Special Variables
+    const URL = 'https://cuboid-standing-scribe.glitch.me/movies';
+    //--- READ ----
+    fetch(URL)
+        .then( response => {
+            response.json()
+                .then(movies => {
+//Going to run through each movie
+                    movies.forEach(movie => {
+//The Container for each movie
+                        $('#post').append(
+                            `<section class='bg-dark text-white m-3 p-3 h-fit-content' id="mainContainer">
+                            <img src="${movie.poster}" class="rounded">
+                            <section class="">
                             <h4 class='pt-3 text-capitalize'>${movie.title}</h4>
-                             <p class='p-0 m-0'>${movie.year}</p>
+                            <p class='p-0 m-0'>${movie.year}</p>
                             <p class='p-0 m-0'>${movie.rating} Stars</p>
                             <p class='p-0 m-0'>${movie.genre}</p>
                             <p class='p-0 m-0'>${movie.director}</p>
-                            <button id="edit" class="btn btn-primary">Edit</button><button id="delete" class="btn btn-secondary">Delete</button>
-                        </section>
-                    </section>`
-                )
-            });
+                            <button id="edit" class="btn btn-primary">Edit</button>
+                            <button id="save" class="btn btn-warning d-none">Save</button>
+                            <button id="delete" class="btn btn-secondary">Delete</button>
+                        </section>`
+                        )
+                    })
+                })
+        })
+    //--- CREATE ----
+    function create(){
+        //----- This is going to add the content to the list and update it live
+        $('[type="submit"]').click((e)=>{
+            e.preventDefault();
+            console.log(e.target);
 
-            //----- This is going to add the content to the list and update it live
-            $('[type="submit"]').click((e)=>{
-                e.preventDefault();
-                console.log(e.target);
+            const titleInput = $('#movieTitle').val();
+            const yearInput = $('#yearMovie').val();
+            const ratingInput = $('#ratingMovie').val();
+            const genreInput = $('#genreMovie').val();
+            const directorInput = $('#directorMovie').val();
 
-                const titleInput = $('#movieTitle').val();
-                const yearInput = $('#yearMovie').val();
-                const ratingInput = $('#ratingMovie').val();
-                const genreInput = $('#genreMovie').val();
-                const directorInput = $('#directorMovie').val();
-
-                fetch('https://cuboid-standing-scribe.glitch.me/movies',{
-                    method:'POST',
-                    body: JSON.stringify({
-                        title:titleInput,
-                        rating:ratingInput,
-                        year:yearInput,
-                        genre:genreInput,
-                        director:directorInput
-                    }),
-                    headers:{
-                        'Content-Type': 'application/json'
-                    }
-                }).then( response => response.json())
+            fetch(URL,{
+                method:'POST',
+                body: JSON.stringify({
+                    title:titleInput,
+                    rating:ratingInput,
+                    year:yearInput,
+                    genre:genreInput,
+                    director:directorInput
+                }),
+                headers:{
+                    'Content-Type': 'application/json'
+                }
+            }).then( response => response.json())
                 .then( movie => {
                     $('#post').append(
                         `<section class='bg-dark text-white m-3 p-3 h-fit-content' id="mainContainer">
                         <img src="${movie.poster}" class="rounded">
                         <section class="">
-                            <h4 class='pt-3 text-capitalize'>${movie.title}</h4>
-                             <p class='p-0 m-0'>${movie.year}</p>
-                            <p class='p-0 m-0'>${movie.rating} Stars</p>
-                            <p class='p-0 m-0'>${movie.genre}</p>
-                            <p class='p-0 m-0'>${movie.director}</p>
-                            <button id="edit" class="btn btn-primary">Edit</button><button id="delete" class="btn btn-secondary">Delete</button>
-                        </section>
+                        <h4 class='pt-3 text-capitalize'>${movie.title}</h4>
+                        <p class='p-0 m-0'>${movie.year}</p>
+                        <p class='p-0 m-0'>${movie.rating} Stars</p>
+                        <p class='p-0 m-0'>${movie.genre}</p>
+                        <p class='p-0 m-0'>${movie.director}</p>
+                        <button id="edit" class="btn btn-primary">Edit</button>
+                        <button id="save" class="btn btn-warning D-none">Save</button>
+                        <button id="delete" class="btn btn-secondary">Delete</button>
                     </section>`
                     )
                 })
-
-            })
-
-
-            //----- UPDATE THE INFO
-            $('#post').click((e)=>{
-                if (e.target.id === 'edit') {
-                        console.log('you pressed edit')
-                    } else if (e.target.id === 'delete') {
-                        console.log('you pressed delete')
-                    }
-            });
+        })
+    }
+    create();
 
 
+    //----- UPDATE THE INFO
 
-        });
-    });
+    $('#post').click((e)=>{
+        console.log(e);
+        if (e.target.id === 'edit') {
+            console.log('you pressed edit');
+            $(document).find('#edit' ).hide()
+            $(document).find('#save').removeClass('d-none')
+        }
+        //----- UPDATE THE INFO
+        else if (e.target.id === 'delete') {
+            console.log(e);
+            console.log('you pressed delete')
+        }
+    })
+
 </script>
 </html>
