@@ -23,7 +23,7 @@
     <h1> Movie Palace</h1>
 </header>
 
-<form class="border w-50 mx-auto bg-light shadow p-3">
+<form class="border w-50 mx-auto bg-light shadow p-3" action="#" method="get">
     <div class="form-group">
         <label  class="border p-2 mx-auto" for="movieTitle">Title</label>
         <input type="text" class="form-control" id="movieTitle" aria-describedby="movieTitle" placeholder="Enter Movie Title">
@@ -62,15 +62,19 @@
             movies.forEach( movie => {
                 // do something with each user object...
                 $('#post').append(
-                    "<section class='bg-dark text-white m-3  '>" +
-                    "<h4 class='p-0 m-0'>"+movie.title +"</h4>"+
-                    "<p class='p-0 m-0'>"+movie.rating +"</p>"+
-                    "<p class='p-0 m-0'>"+movie.year +"</p>"+
-                    "<p class='p-0 m-0'>"+movie.genre +"</p>"+
-                    "<p class='p-0 m-0'>"+movie.director +"</p>"+
-                    "<button>Edit</button>"+
-                    "<button>Delete</button>"+
-                    "</section>"
+
+
+                    `
+                    <section class='bg-dark text-white m-3'>
+                        <img src="${movie.poster}" style='width: 220px'>
+                        <h4 class='p-0 m-0'>${movie.title}</h4>
+                        <p class='p-0 m-0'>${movie.rating}</p>
+                        <p class='p-0 m-0'>${movie.year}</p>
+                         <p class='p-0 m-0'>${movie.genre}</p>
+                         <p class='p-0 m-0'>${movie.director}</p>
+                         <button>Edit</button><button>Delete</button>
+                    </section>
+                    `
                 )
             });
         });
