@@ -71,20 +71,22 @@
                             <p class='p-0 m-0'>${movie.rating} Stars</p>
                             <p class='p-0 m-0'>${movie.genre}</p>
                             <p class='p-0 m-0'>${movie.director}</p>
-                            <button id="edit" class="btn btn-primary">Edit</button>
-                            <button id="save" class="btn btn-warning d-none">Save</button>
-                            <button id="delete" class="btn btn-secondary">Delete</button>
+                            <button data-id="${movie.id}" class="btn btn-primary">Edit</button>
+                            <button data-id="${movie.id}" class="btn btn-warning d-none">Save</button>
+                            <button data-id="${movie.id}" class="btn btn-secondary">Delete</button>
                         </section>`
                         )
                     })
                 })
         })
+    $
     //--- CREATE ----
     function create(){
         //----- This is going to add the content to the list and update it live
         $('[type="submit"]').click((e)=>{
             e.preventDefault();
             console.log(e.target);
+
 
             const titleInput = $('#movieTitle').val();
             const yearInput = $('#yearMovie').val();
@@ -125,15 +127,67 @@
     }
     create();
 
-
-    //----- UPDATE THE INFO
+    // $('.btn').on('click', function(e){
+    //     const titleInput = $('#movieTitle').val();
+    //     const yearInput = $('#yearMovie').val();
+    //     const ratingInput = $('#ratingMovie').val();
+    //     const genreInput = $('#genreMovie').val();
+    //     const directorInput = $('#directorMovie').val();
+    //     const targetID = e.target.dataset.id
+    //     const modification = {
+    //         title:titleInput,
+    //         rating:ratingInput,
+    //         year:yearInput,
+    //         genre:genreInput,
+    //         director:directorInput
+    //     }
+    //     const putOptions = {
+    //         method: 'PUT',
+    //         headers: {
+    //             'Content-Type' : 'application/json'
+    //         },
+    //         body: JSON.stringify(modification)
+    //     }
+    //     function getMovies(){
+    //         fetch(URL).then(resp => resp.json()).then(data => console.log(data));
+    //     }
+    //
+    //     fetch(URL + targetId, putOptions).then(getMovies);
+    // })
+    // ----- UPDATE THE INFO
 
     $('#post').click((e)=>{
+        var targetID = e.target.dataset.id
+        console.log(targetID)
         console.log(e);
+        const titleInput = $('#movieTitle').val();
+        const yearInput = $('#yearMovie').val();
+        const ratingInput = $('#ratingMovie').val();
+        const genreInput = $('#genreMovie').val();
+        const directorInput = $('#directorMovie').val();
         if (e.target.id === 'edit') {
             console.log('you pressed edit');
             $(document).find('#edit' ).hide()
             $(document).find('#save').removeClass('d-none')
+           const modification = {
+                title:titleInput,
+                rating:ratingInput,
+                year:yearInput,
+                genre:genreInput,
+                director:directorInput
+            }
+            const putOptions = {
+                method: 'PUT',
+                headers: {
+                    'Content-Type' : 'application/json'
+                },
+                body: JSON.stringify(modification)
+            }
+            function getMovies(){
+                fetch(URL).then(resp => resp.json()).then(data => console.log(data));
+            }
+
+            fetch(URL + "/" + targetId, putOptions).then(getMovies);
         }
         //----- UPDATE THE INFO
         else if (e.target.id === 'delete') {
